@@ -8,7 +8,10 @@ object Solution {
   def main(args: Array[String]) {
     val matrix: _root_.scala.Array[Array[Char]] = (1 to 10).map(_ => readLine()).toArray.map(m => m.toCharArray)
     val words: Array[_root_.java.lang.String] = readLine().split(";")
-    solve(matrix, words, 0)
+    if (solve(matrix, words, 0))
+      printMatrix(matrix)
+    else
+      print("No Solution")
   }
 
   /**
@@ -157,10 +160,10 @@ object Solution {
    * @param wordIndex
    * @return  1 if solution is found else 0
    */
-  def solve(matrix: Array[Array[Char]], words: Array[String], wordIndex: Int): Int = {
+  def solve(matrix: Array[Array[Char]], words: Array[String], wordIndex: Int): Boolean = {
     if (wordIndex == words.length) {
-      printMatrix(matrix)
-      return 1
+      //printMatrix(matrix)
+      return true
     }
 
     val word: _root_.scala.Predef.String = words(wordIndex)
@@ -170,20 +173,20 @@ object Solution {
         if (matrix(i)(j) == '-' || matrix(i)(j) == word(0)) {
           if (validHorizontalPosition(matrix, word, i, j)) {
             val updated: _root_.scala.Array[Boolean] = applyHorizontalPosition(matrix, word, i, j)
-            if (solve(matrix, words, wordIndex + 1) == 1)
-              return 1
+            if (solve(matrix, words, wordIndex + 1) )
+              return true
             backtrackHorizontalPosition(matrix, updated, i, j)
           }
           // try fixing words in vertical slots
           if (validVerticalPosition(matrix, word, i, j)) {
             val updated: _root_.scala.Array[Boolean] = applyVerticalPosition(matrix, word, i, j)
-            if (solve(matrix, words, wordIndex + 1) == 1)
-              return 1
+            if (solve(matrix, words, wordIndex + 1))
+              return true
             backtrackVerticalPosition(matrix, updated, i, j)
           }
         }
       }
     }
-    0
+    false
   }
 }
